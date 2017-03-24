@@ -8,13 +8,13 @@
   using Windows.Media.Capture.Frames;
   using Windows.Media.Devices;
 
-  public abstract class MediaCaptureFrameProcessor
+  public abstract class MediaCaptureFrameProcessor : IDisposable
   {
     public MediaCaptureFrameProcessor(
-      MediaFrameSourceFinder mediaFrameSourceFinder, 
-      DeviceInformation videoDeviceInformation, 
+      MediaFrameSourceFinder mediaFrameSourceFinder,
+      DeviceInformation videoDeviceInformation,
       string mediaEncodingSubtype,
-      MediaCaptureMemoryPreference memoryPreference = MediaCaptureMemoryPreference.Cpu) 
+      MediaCaptureMemoryPreference memoryPreference = MediaCaptureMemoryPreference.Cpu)
     {
       this.mediaFrameSourceFinder = mediaFrameSourceFinder;
       this.videoDeviceInformation = videoDeviceInformation;
@@ -30,47 +30,57 @@
 
     public async Task ProcessFramesAsync(TimeSpan timeout)
     {
-      using (var mediaCapture = await this.CreateMediaCaptureAsync())
-      {
-        var mediaFrameSource = mediaCapture.FrameSources[
-          this.mediaFrameSourceFinder.FrameSourceInfo.Id];
-
-        using (var frameReader =
-          await mediaCapture.CreateFrameReaderAsync(
-            mediaFrameSource, this.mediaEncodingSubtype))
+      await Task.Run(
+        async () =>
         {
-          var taskCompleted = new TaskCompletionSource<bool>();
-          var busy = false;
+          // Note: the natural thing to do here is what I used to do which is to create the
+          // MediaCapture inside of a using block.
+          // Problem is, that seemed to cause a situation where I could get a crash (AV) in
+          //
+          // Windows.Media.dll!Windows::Media::Capture::Frame::MediaFrameReader::CompletePendingStopOperation
+          //
+          // Which seemed to be related to stopping/disposing the MediaFrameReader and then
+          // disposing the media capture immediately after.
+          // 
+          // Right now, I've promoted the media capture to a member variable and held it around
+          // until this object is disposed. Bizarrely, this seems to fix the problem and I can't
+          // claim that I've figured out why yet.
+          //
+          // It feels like there's some kind of race that I can't put my finger on - I suspect
+          // I'll be coming back to this code in the future.
+          var startTime = DateTime.Now;
 
-          frameReader.FrameArrived += (s, e) =>
+          this.mediaCapture = await this.CreateMediaCaptureAsync();
+
+          var mediaFrameSource = mediaCapture.FrameSources[
+            this.mediaFrameSourceFinder.FrameSourceInfo.Id];
+
+          using (var frameReader =
+            await mediaCapture.CreateFrameReaderAsync(
+              mediaFrameSource, this.mediaEncodingSubtype))
           {
             bool done = false;
 
-            if (!busy)
-            {
-              busy = true;
+            await frameReader.StartAsync();
 
-              using (var frame = s.TryAcquireLatestFrame())
+            while (!done)
+            {
+              using (var frame = frameReader.TryAcquireLatestFrame())
               {
                 if (frame != null)
                 {
                   done = this.ProcessFrame(frame);
                 }
               }
-              busy = false;
+              if (!done)
+              {
+                done = (DateTime.Now - startTime) > timeout;
+              }
             }
-            if (done)
-            {
-              taskCompleted.SetResult(true);
-            }
-          };
-          await frameReader.StartAsync();
-
-          await Task.WhenAny(Task.Delay(timeout), taskCompleted.Task);
-
-          await frameReader.StopAsync();
+            await frameReader.StopAsync();
+          }
         }
-      }
+      );
     }
     async Task<MediaCapture> CreateMediaCaptureAsync()
     {
@@ -89,10 +99,21 @@
 
       return (mediaCapture);
     }
+
+    public void Dispose()
+    {
+      if (this.mediaCapture != null)
+      {
+        this.mediaCapture.Dispose();
+        this.mediaCapture = null;
+      }
+    }
+
     Action<VideoDeviceController> videoDeviceControllerInitialiser;
     string mediaEncodingSubtype;
     MediaFrameSourceFinder mediaFrameSourceFinder;
     DeviceInformation videoDeviceInformation;
     MediaCaptureMemoryPreference memoryPreference;
+    MediaCapture mediaCapture;
   }
 }

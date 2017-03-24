@@ -32,20 +32,21 @@
         {
           // Make a processor which will pull frames from the camera and run
           // ZXing over them to look for QR codes.
-          var frameProcessor = new QrCaptureFrameProcessor(
+          using (var frameProcessor = new QrCaptureFrameProcessor(
             mediaFrameSourceFinder,
             videoCaptureDevice,
-            MediaEncodingSubtypes.Bgra8);
+            MediaEncodingSubtypes.Bgra8))
+          {
+            // Remember to ask for auto-focus on the video capture device.
+            frameProcessor.SetVideoDeviceControllerInitialiser(
+              vd => vd.Focus.TrySetAuto(true));
 
-          // Remember to ask for auto-focus on the video capture device.
-          frameProcessor.SetVideoDeviceControllerInitialiser(
-            vd => vd.Focus.TrySetAuto(true));
+            // Process frames for up to 30 seconds to see if we get any QR codes...
+            await frameProcessor.ProcessFramesAsync(timeout);
 
-          // Process frames for up to 30 seconds to see if we get any QR codes...
-          await frameProcessor.ProcessFramesAsync(timeout);
-
-          // See what result we got.
-          result = frameProcessor.QrZxingResult;
+            // See what result we got.
+            result = frameProcessor.QrZxingResult;
+          }
         }
       }
       // Call back with whatever result we got.
