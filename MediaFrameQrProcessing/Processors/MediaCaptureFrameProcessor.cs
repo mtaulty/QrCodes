@@ -30,33 +30,33 @@
 
     public async Task ProcessFramesAsync(TimeSpan timeout)
     {
+      // Note: the natural thing to do here is what I used to do which is to create the
+      // MediaCapture inside of a using block.
+      // Problem is, that seemed to cause a situation where I could get a crash (AV) in
+      //
+      // Windows.Media.dll!Windows::Media::Capture::Frame::MediaFrameReader::CompletePendingStopOperation
+      //
+      // Which seemed to be related to stopping/disposing the MediaFrameReader and then
+      // disposing the media capture immediately after.
+      // 
+      // Right now, I've promoted the media capture to a member variable and held it around
+      // and instead of creating/disposing an instance each time one instance is kept
+      // indefinitely.
+      // It's not what I wanted...
       await Task.Run(
         async () =>
         {
-          // Note: the natural thing to do here is what I used to do which is to create the
-          // MediaCapture inside of a using block.
-          // Problem is, that seemed to cause a situation where I could get a crash (AV) in
-          //
-          // Windows.Media.dll!Windows::Media::Capture::Frame::MediaFrameReader::CompletePendingStopOperation
-          //
-          // Which seemed to be related to stopping/disposing the MediaFrameReader and then
-          // disposing the media capture immediately after.
-          // 
-          // Right now, I've promoted the media capture to a member variable and held it around
-          // until this object is disposed. Bizarrely, this seems to fix the problem and I can't
-          // claim that I've figured out why yet.
-          //
-          // It feels like there's some kind of race that I can't put my finger on - I suspect
-          // I'll be coming back to this code in the future.
           var startTime = DateTime.Now;
 
-          this.mediaCapture = await this.CreateMediaCaptureAsync();
-
-          var mediaFrameSource = mediaCapture.FrameSources[
+          if (this.mediaCapture == null)
+          {
+            this.mediaCapture = await this.CreateMediaCaptureAsync();
+          }
+          var mediaFrameSource = this.mediaCapture.FrameSources[
             this.mediaFrameSourceFinder.FrameSourceInfo.Id];
 
           using (var frameReader =
-            await mediaCapture.CreateFrameReaderAsync(
+            await this.mediaCapture.CreateFrameReaderAsync(
               mediaFrameSource, this.mediaEncodingSubtype))
           {
             bool done = false;
