@@ -175,7 +175,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
-  - {fileID: 947214272}
+  - {fileID: 1697020908}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -204,10 +204,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 401017175}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c87e036ec69847444917e3380948c965, type: 3}
+  m_Script: {fileID: 11500000, guid: ce2b9b1db5a0b544085a5ad008607651, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  textMeshObject: {fileID: 947214272}
+  textMeshObject: {fileID: 1697020908}
 --- !u!114 &401017177
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -216,7 +216,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 401017175}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a5e415902fbee7469c9400e5bde27ae, type: 3}
+  m_Script: {fileID: 11500000, guid: 90281b63e684eea4c91c894e89310f37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   RecognizerStart: 0
@@ -270,50 +270,50 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &947214271
+--- !u!1001 &1697020907
 Prefab:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 212786289}
     m_Modifications:
-    - target: {fileID: 4000010330146594, guid: 227f4150adc394343b7d90a8fd3ac99b, type: 2}
+    - target: {fileID: 4000010330146594, guid: 6d046620e13654a4681adb55470e49bd, type: 2}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4000010330146594, guid: 227f4150adc394343b7d90a8fd3ac99b, type: 2}
+    - target: {fileID: 4000010330146594, guid: 6d046620e13654a4681adb55470e49bd, type: 2}
       propertyPath: m_LocalPosition.y
       value: -0.1
       objectReference: {fileID: 0}
-    - target: {fileID: 4000010330146594, guid: 227f4150adc394343b7d90a8fd3ac99b, type: 2}
+    - target: {fileID: 4000010330146594, guid: 6d046620e13654a4681adb55470e49bd, type: 2}
       propertyPath: m_LocalPosition.z
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 4000010330146594, guid: 227f4150adc394343b7d90a8fd3ac99b, type: 2}
+    - target: {fileID: 4000010330146594, guid: 6d046620e13654a4681adb55470e49bd, type: 2}
       propertyPath: m_LocalRotation.x
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 4000010330146594, guid: 227f4150adc394343b7d90a8fd3ac99b, type: 2}
+    - target: {fileID: 4000010330146594, guid: 6d046620e13654a4681adb55470e49bd, type: 2}
       propertyPath: m_LocalRotation.y
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 4000010330146594, guid: 227f4150adc394343b7d90a8fd3ac99b, type: 2}
+    - target: {fileID: 4000010330146594, guid: 6d046620e13654a4681adb55470e49bd, type: 2}
       propertyPath: m_LocalRotation.z
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 4000010330146594, guid: 227f4150adc394343b7d90a8fd3ac99b, type: 2}
+    - target: {fileID: 4000010330146594, guid: 6d046620e13654a4681adb55470e49bd, type: 2}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 4000010330146594, guid: 227f4150adc394343b7d90a8fd3ac99b, type: 2}
+    - target: {fileID: 4000010330146594, guid: 6d046620e13654a4681adb55470e49bd, type: 2}
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-  m_ParentPrefab: {fileID: 100100000, guid: 227f4150adc394343b7d90a8fd3ac99b, type: 2}
+  m_ParentPrefab: {fileID: 100100000, guid: 6d046620e13654a4681adb55470e49bd, type: 2}
   m_IsPrefabParent: 0
---- !u!4 &947214272 stripped
+--- !u!4 &1697020908 stripped
 Transform:
-  m_PrefabParentObject: {fileID: 4000010330146594, guid: 227f4150adc394343b7d90a8fd3ac99b,
+  m_PrefabParentObject: {fileID: 4000010330146594, guid: 6d046620e13654a4681adb55470e49bd,
     type: 2}
-  m_PrefabInternal: {fileID: 947214271}
+  m_PrefabInternal: {fileID: 1697020907}
