@@ -8,11 +8,24 @@
 
   public static class ZXingQrCodeScanner
   {
+    /// <summary>
+    /// Brings together the pieces to do a scan for a QR code from the first
+    /// camera that it finds on the system. You might have more success/
+    /// flexibility by just using the pieces directly but I was trying to
+    /// package things up into a simple, single method here.
+    /// </summary>
+    /// <param name="resultCallback">Your function to be called back when we 
+    /// find a QR code. Note that you get called with null if we time out
+    /// while looking for one and you will get called multiple times if
+    /// you have not chosen to pass a timeout</param>
+    /// <param name="timeout">An optional timeout. If you pass it then we
+    /// will stop after that period. Otherwise, we'll run continually.
+    /// </param>
     public static async void ScanFirstCameraForQrCode(
-      Action<Result> resultCallback,
-      TimeSpan timeout)
+      Action<string> resultCallback,
+      TimeSpan? timeout)
     {
-      Result result = null;
+      string result = null;
 
       // Note - I keep this frame processor around which means keeping the
       // underlying MediaCapture around because when I didn't keep it
@@ -53,13 +66,11 @@
       if (frameProcessor != null)
       {
         // Process frames for up to 30 seconds to see if we get any QR codes...
-        await frameProcessor.ProcessFramesAsync(timeout);
+        await frameProcessor.ProcessFramesAsync(timeout, resultCallback);
 
         // See what result we got.
-        result = frameProcessor.QrZxingResult;
+        result = frameProcessor.Result;
       }
-      // Call back with whatever result we got.
-      resultCallback(result);
     }
     static QrCaptureFrameProcessor frameProcessor;
   }

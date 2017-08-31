@@ -25,7 +25,7 @@
       this.recognizer = new SpeechRecognizer();
 
       this.recognizer.Constraints.Add(
-        new SpeechRecognitionListConstraint(new string[] { "scan", "reset" }));
+        new SpeechRecognitionListConstraint(new string[] { "scan", "run", "reset" }));
 
       await this.recognizer.CompileConstraintsAsync();
 
@@ -50,24 +50,50 @@
       ZXingQrCodeScanner.ScanFirstCameraForQrCode(
         result =>
         {
-          this.txtStatus.Text = "done, say 'reset' to reset";
-          this.txtResult.Text = result?.Text ?? "none";
+          this.Dispatch(
+            () =>
+            {
+              this.txtStatus.Text = "done, say 'reset' to reset";
+              this.txtResult.Text = result ?? "none";
+            }
+          );
         },
         TimeSpan.FromSeconds(30));
     }
+    void Run()
+    {
+      this.txtResult.Text = "running forever";
+
+      ZXingQrCodeScanner.ScanFirstCameraForQrCode(
+        result =>
+        {
+          this.Dispatch(() =>
+          {
+            this.txtResult.Text = $"Got result [{result}] at {DateTime.Now}";
+          });
+        },
+        null);
+    }
     void Reset()
     {
-      this.txtStatus.Text = "say 'scan' to start";
+      this.txtStatus.Text = "say 'scan' or 'run' to start";
       this.txtResult.Text = string.Empty;
     }
+    void Dispatch(DispatchedHandler action)
+    {
+      this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, action);
+    }
     void OnSpeechResultGenerated(
-      SpeechContinuousRecognitionSession sender, 
+      SpeechContinuousRecognitionSession sender,
       SpeechContinuousRecognitionResultGeneratedEventArgs args)
     {
       switch (args.Result.Text)
       {
         case "scan":
           this.Scan();
+          break;
+        case "run":
+          this.Run();
           break;
         case "reset":
           this.Reset();

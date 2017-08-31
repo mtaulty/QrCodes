@@ -8,10 +8,8 @@
   using Windows.Media.Capture;
   using Windows.Media.Capture.Frames;
 
-  public class QrCaptureFrameProcessor : MediaCaptureFrameProcessor
+  public class QrCaptureFrameProcessor : MediaCaptureFrameProcessor<string>
   {
-    public Result QrZxingResult { get; private set; }
-
     public QrCaptureFrameProcessor(
       MediaFrameSourceFinder mediaFrameSourceFinder, 
       DeviceInformation videoDeviceInformation, 
@@ -27,6 +25,8 @@
     }
     protected override bool ProcessFrame(MediaFrameReference frameReference)
     {
+      this.Result = null;
+
       // doc here https://msdn.microsoft.com/en-us/library/windows/apps/xaml/windows.media.capture.frames.videomediaframe.aspx
       // says to dispose this softwarebitmap if you access it.
       using (var bitmap = frameReference.VideoMediaFrame.SoftwareBitmap)
@@ -42,14 +42,19 @@
           }
           bitmap.CopyToBuffer(buffer.AsBuffer());
 
-          this.QrZxingResult = ZXingQRCodeDecoder.DecodeBufferToQRCode(
+          var zxingResult = ZXingQRCodeDecoder.DecodeBufferToQRCode(
             buffer, bitmap.PixelWidth, bitmap.PixelHeight, BitmapFormat.BGR32);
+
+          if (zxingResult != null)
+          {
+            this.Result = zxingResult.Text;
+          }
         }
         catch
         {
         }
       }
-      return (this.QrZxingResult != null);
+      return (this.Result != null);
     }
     byte[] buffer = null;
   }

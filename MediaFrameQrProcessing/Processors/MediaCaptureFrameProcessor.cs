@@ -8,7 +8,7 @@
   using Windows.Media.Capture.Frames;
   using Windows.Media.Devices;
 
-  public abstract class MediaCaptureFrameProcessor : IDisposable
+  public abstract class MediaCaptureFrameProcessor<T> : IDisposable
   {
     public MediaCaptureFrameProcessor(
       MediaFrameSourceFinder mediaFrameSourceFinder,
@@ -27,8 +27,11 @@
       this.videoDeviceControllerInitialiser = initialiser;
     }
     protected abstract bool ProcessFrame(MediaFrameReference frameReference);
+    public T Result { get; protected set; }
 
-    public async Task ProcessFramesAsync(TimeSpan timeout)
+    public async Task ProcessFramesAsync(
+      TimeSpan? timeout,
+      Action<T> resultCallback = null)
     {
       // Note: the natural thing to do here is what I used to do which is to create the
       // MediaCapture inside of a using block.
@@ -47,6 +50,8 @@
         async () =>
         {
           var startTime = DateTime.Now;
+
+          this.Result = default(T);
 
           if (this.mediaCapture == null)
           {
@@ -69,12 +74,21 @@
               {
                 if (frame != null)
                 {
-                  done = this.ProcessFrame(frame);
+                  if (this.ProcessFrame(frame) && (resultCallback != null))
+                  {
+                    resultCallback(this.Result);
+                  }
                 }
               }
-              if (!done)
+              if (timeout.HasValue)
               {
-                done = (DateTime.Now - startTime) > timeout;
+                var timedOut = (DateTime.Now - startTime) > timeout;
+
+                if (timedOut && (resultCallback != null))
+                {
+                  resultCallback(default(T));
+                }
+                done = (this.Result != null) || (timedOut);
               }
             }
             await frameReader.StopAsync();
@@ -99,7 +113,6 @@
 
       return (mediaCapture);
     }
-
     public void Dispose()
     {
       if (this.mediaCapture != null)
@@ -108,7 +121,6 @@
         this.mediaCapture = null;
       }
     }
-
     Action<VideoDeviceController> videoDeviceControllerInitialiser;
     string mediaEncodingSubtype;
     MediaFrameSourceFinder mediaFrameSourceFinder;
