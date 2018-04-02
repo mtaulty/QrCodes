@@ -2,19 +2,46 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Windows.Speech;
 
 public class Placeholder : MonoBehaviour
 {
-  public Transform textMeshObject;
+    public Transform textMeshObject;
+    KeywordRecognizer recognizer;
 
-  private void Start()
-  {
-    this.textMesh = this.textMeshObject.GetComponent<TextMesh>();
-    this.OnReset();
-  }
-  public void OnScan()
-  {
-    this.textMesh.text = "scanning for 30s";
+    private void Start()
+    {
+        this.textMesh = this.textMeshObject.GetComponent<TextMesh>();
+        
+        this.recognizer = new KeywordRecognizer(
+            new string[] { "scan", "run", "reset" });
+
+        this.recognizer.OnPhraseRecognized += OnPhraseRecognized;
+
+        this.recognizer.Start();
+
+        this.OnReset();
+    }
+
+    void OnPhraseRecognized(PhraseRecognizedEventArgs args)
+    {
+        if (args.text == "scan")
+        {
+            this.OnScan();
+        }
+        else if (args.text == "run")
+        {
+            this.OnRun();
+        }
+        else if (args.text == "reset")
+        {
+            this.OnReset();
+        }
+    }
+
+    public void OnScan()
+    {
+        this.textMesh.text = "scanning for 30s";
 
 #if !UNITY_EDITOR
     MediaFrameQrProcessing.Wrappers.ZXingQrCodeScanner.ScanFirstCameraForQrCode(
@@ -28,10 +55,10 @@ public class Placeholder : MonoBehaviour
         },
         TimeSpan.FromSeconds(30));
 #endif
-  }
-  public void OnRun()
-  {
-    this.textMesh.text = "running forever";
+    }
+    public void OnRun()
+    {
+        this.textMesh.text = "running forever";
 
 #if !UNITY_EDITOR
     MediaFrameQrProcessing.Wrappers.ZXingQrCodeScanner.ScanFirstCameraForQrCode(
@@ -45,10 +72,10 @@ public class Placeholder : MonoBehaviour
         },
         null);
 #endif
-  }
-  public void OnReset()
-  {
-    this.textMesh.text = "say scan or run to start";
-  }
-  TextMesh textMesh;
+    }
+    public void OnReset()
+    {
+        this.textMesh.text = "say scan or run to start";
+    }
+    TextMesh textMesh;
 }
