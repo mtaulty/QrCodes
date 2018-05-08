@@ -112,7 +112,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Processors\BarCodeCaptureFrameProcessor.cs" />
     <Compile Include="Wrappers\ZXingQrCodeScanner.cs" />
-    <Compile Include="ZXing\ZxingQRCodeDecoder.cs" />
+    <Compile Include="ZXing\ZxingBarCodeDecoder.cs" />
     <Compile Include="VideoDeviceFinders\VideoCaptureDeviceFinder.cs" />
     <EmbeddedResource Include="Properties\MediaFrameQrProcessing.rd.xml" />
   </ItemGroup>
