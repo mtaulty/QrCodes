@@ -8,9 +8,9 @@
   using Windows.Media.Capture;
   using Windows.Media.Capture.Frames;
 
-  public class QrCaptureFrameProcessor : MediaCaptureFrameProcessor<string>
+  public class BarCodeCaptureFrameProcessor : MediaCaptureFrameProcessor<string>
   {
-    public QrCaptureFrameProcessor(
+    public BarCodeCaptureFrameProcessor(
       MediaFrameSourceFinder mediaFrameSourceFinder, 
       DeviceInformation videoDeviceInformation, 
       string mediaEncodingSubtype, 
@@ -42,7 +42,7 @@
           }
           bitmap.CopyToBuffer(buffer.AsBuffer());
 
-          var zxingResult = ZXingQRCodeDecoder.DecodeBufferToQRCode(
+          var zxingResult = ZXingBarCodeDecoder.DecodeBufferToBarCode(
             buffer, bitmap.PixelWidth, bitmap.PixelHeight, BitmapFormat.BGR32);
 
           if (zxingResult != null)

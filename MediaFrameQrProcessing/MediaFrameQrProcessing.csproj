@@ -110,7 +110,7 @@
     <Compile Include="Processors\MediaCaptureFrameProcessor.cs" />
     <Compile Include="VideoDeviceFinders\MediaFrameSourceFinder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Processors\QrCaptureFrameProcessor.cs" />
+    <Compile Include="Processors\BarCodeCaptureFrameProcessor.cs" />
     <Compile Include="Wrappers\ZXingQrCodeScanner.cs" />
     <Compile Include="ZXing\ZxingQRCodeDecoder.cs" />
     <Compile Include="VideoDeviceFinders\VideoCaptureDeviceFinder.cs" />

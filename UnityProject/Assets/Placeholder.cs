@@ -44,7 +44,7 @@ public class Placeholder : MonoBehaviour
         this.textMesh.text = "scanning for 30s";
 
 #if !UNITY_EDITOR
-    MediaFrameQrProcessing.Wrappers.ZXingQrCodeScanner.ScanFirstCameraForQrCode(
+    MediaFrameQrProcessing.Wrappers.ZXingBarCodeScanner.ScanFirstCameraForBarCode(
         result =>
         {
           UnityEngine.WSA.Application.InvokeOnAppThread(() =>
@@ -61,7 +61,7 @@ public class Placeholder : MonoBehaviour
         this.textMesh.text = "running forever";
 
 #if !UNITY_EDITOR
-    MediaFrameQrProcessing.Wrappers.ZXingQrCodeScanner.ScanFirstCameraForQrCode(
+    MediaFrameQrProcessing.Wrappers.ZXingBarCodeScanner.ScanFirstCameraForBarCode(
         result =>
         {
           UnityEngine.WSA.Application.InvokeOnAppThread(() =>

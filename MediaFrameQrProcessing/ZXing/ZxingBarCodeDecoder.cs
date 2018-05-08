@@ -5,21 +5,21 @@
   using Windows.Storage.Streams;
   using ZXing;
 
-  public static class ZXingQRCodeDecoder
+  public static class ZXingBarCodeDecoder
   {
     static BarcodeReader barcodeReader;
 
-    static ZXingQRCodeDecoder()
+    static ZXingBarCodeDecoder()
     {
       barcodeReader = new BarcodeReader();
       barcodeReader.Options.PureBarcode = false;
       barcodeReader.Options.Hints.Add(DecodeHintType.TRY_HARDER, true);
       barcodeReader.Options.PossibleFormats = 
-        new BarcodeFormat[] { BarcodeFormat.QR_CODE };
+        new BarcodeFormat[] { BarcodeFormat.All_1D };
 
       barcodeReader.Options.TryHarder = true;
     }
-    public static Result DecodeBufferToQRCode(
+    public static Result DecodeBufferToBarCode(
       byte[] buffer,
       int width, 
       int height, 
@@ -33,13 +33,13 @@
 
       return (zxingResult);
     }
-    public static Result DecodeBufferToQRCode(
+    public static Result DecodeBufferToBarCode(
       IBuffer buffer,
       int width, 
       int height, 
       BitmapFormat bitmapFormat)
     {
-      return (DecodeBufferToQRCode(buffer.ToArray(), width, height, bitmapFormat));
+      return (DecodeBufferToBarCode(buffer.ToArray(), width, height, bitmapFormat));
     }
   }
 }

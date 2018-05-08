@@ -47,7 +47,7 @@
     {
       this.txtStatus.Text = "scanning for 30s";
 
-      ZXingQrCodeScanner.ScanFirstCameraForQrCode(
+      ZXingBarCodeScanner.ScanFirstCameraForBarCode(
         result =>
         {
           this.Dispatch(
@@ -64,7 +64,7 @@
     {
       this.txtResult.Text = "running forever";
 
-      ZXingQrCodeScanner.ScanFirstCameraForQrCode(
+      ZXingBarCodeScanner.ScanFirstCameraForBarCode(
         result =>
         {
           this.Dispatch(() =>

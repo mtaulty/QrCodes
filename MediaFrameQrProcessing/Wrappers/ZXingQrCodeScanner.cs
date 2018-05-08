@@ -6,7 +6,7 @@
   using System;
   using Windows.Media.MediaProperties;
 
-  public static class ZXingQrCodeScanner
+  public static class ZXingBarCodeScanner
   {
     /// <summary>
     /// Brings together the pieces to do a scan for a QR code from the first
@@ -15,13 +15,13 @@
     /// package things up into a simple, single method here.
     /// </summary>
     /// <param name="resultCallback">Your function to be called back when we 
-    /// find a QR code. Note that you get called with null if we time out
+    /// find a bar code. Note that you get called with null if we time out
     /// while looking for one and you will get called multiple times if
     /// you have not chosen to pass a timeout</param>
     /// <param name="timeout">An optional timeout. If you pass it then we
     /// will stop after that period. Otherwise, we'll run continually.
     /// </param>
-    public static async void ScanFirstCameraForQrCode(
+    public static async void ScanFirstCameraForBarCode(
       Action<string> resultCallback,
       TimeSpan? timeout)
     {
@@ -52,7 +52,7 @@
           {
             // Make a processor which will pull frames from the camera and run
             // ZXing over them to look for QR codes.
-            frameProcessor = new QrCaptureFrameProcessor(
+            frameProcessor = new BarCodeCaptureFrameProcessor(
               mediaFrameSourceFinder,
               videoCaptureDevice,
               MediaEncodingSubtypes.Bgra8);
@@ -72,6 +72,6 @@
         result = frameProcessor.Result;
       }
     }
-    static QrCaptureFrameProcessor frameProcessor;
+    static BarCodeCaptureFrameProcessor frameProcessor;
   }
 }
