@@ -1,7 +1,5 @@
 fileFormatVersion: 2
 guid: 1c08375a7c6cf774c85ea491c7a90283
-timeCreated: 1525791593
-licenseType: Pro
 PluginImporter:
   externalObjects: {}
   serializedVersion: 2
@@ -90,7 +88,7 @@ PluginImporter:
       enabled: 1
       settings:
         CPU: AnyCPU
-        DontProcess: True
+        DontProcess: true
         PlaceholderPath: 
         SDK: UWP
         ScriptingBackend: DotNet

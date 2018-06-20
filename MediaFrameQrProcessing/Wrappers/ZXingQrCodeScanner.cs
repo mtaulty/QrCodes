@@ -4,7 +4,9 @@
   using MediaFrameQrProcessing.Processors;
   using MediaFrameQrProcessing.VideoDeviceFinders;
   using System;
-  using Windows.Media.MediaProperties;
+    using Windows.Devices.Enumeration;
+    using Windows.Graphics.Imaging;
+    using Windows.Media.MediaProperties;
 
   public static class ZXingBarCodeScanner
   {
@@ -22,10 +24,11 @@
     /// will stop after that period. Otherwise, we'll run continually.
     /// </param>
     public static async void ScanFirstCameraForBarCode(
-      Action<string> resultCallback,
+      Func<MediaFrameSourceFinder, DeviceInformation, string, BarCodeCaptureFrameProcessor> processorFactory,
+      Action<object, SoftwareBitmap> resultCallback,
       TimeSpan? timeout)
     {
-      string result = null;
+      object result = null;
 
       // Note - I keep this frame processor around which means keeping the
       // underlying MediaCapture around because when I didn't keep it
@@ -52,7 +55,7 @@
           {
             // Make a processor which will pull frames from the camera and run
             // ZXing over them to look for QR codes.
-            frameProcessor = new BarCodeCaptureFrameProcessor(
+            frameProcessor = processorFactory(
               mediaFrameSourceFinder,
               videoCaptureDevice,
               MediaEncodingSubtypes.Bgra8);
