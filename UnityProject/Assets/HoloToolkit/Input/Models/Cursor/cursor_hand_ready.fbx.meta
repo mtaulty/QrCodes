@@ -1,20 +1,28 @@
 fileFormatVersion: 2
-guid: 5b50eb11f41c00d4b9a05d2408ae4654
-timeCreated: 1490730082
+guid: 20553dcf305b52a4e84f5e4f56e5afdc
+timeCreated: 1444068346
 licenseType: Pro
 ModelImporter:
   serializedVersion: 19
   fileIDToRecycleName:
-    100000: //RootNode
-    100002: Cursor_SizeNorthSouth
-    100004: cursor_sizeNorthSouth_ring
-    100006: cursor_sizeNorthSouth_ring_interaction
-    100008: cursor_sizeNorthSouth_ring_interaction_root
-    400000: //RootNode
-    400002: Cursor_SizeNorthSouth
-    400004: cursor_sizeNorthSouth_ring
-    400006: cursor_sizeNorthSouth_ring_interaction
-    400008: cursor_sizeNorthSouth_ring_interaction_root
+    100000: cursor_cross_root
+    100002: //RootNode
+    100004: Cursor_Ring
+    100006: Cursor_SizeNorthSouth
+    100008: cursor_sizeNorthSouth_ring
+    100010: cursor_sizeNorthSouth_ring_interaction
+    100012: cursor_sizeNorthSouth_ring_interaction_root
+    100014: cursor_sizeNorthSouth_ring_press_scale
+    100016: ring_observation_scale
+    400000: cursor_cross_root
+    400002: //RootNode
+    400004: Cursor_Ring
+    400006: Cursor_SizeNorthSouth
+    400008: cursor_sizeNorthSouth_ring
+    400010: cursor_sizeNorthSouth_ring_interaction
+    400012: cursor_sizeNorthSouth_ring_interaction_root
+    400014: cursor_sizeNorthSouth_ring_press_scale
+    400016: ring_observation_scale
     2300000: cursor_sizeNorthSouth_ring_interaction
     3300000: cursor_sizeNorthSouth_ring_interaction
     4300000: cursor_sizeNorthSouth_ring_interaction
@@ -28,6 +36,8 @@ ModelImporter:
     resampleCurves: 1
     optimizeGameObjects: 0
     motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
     animationImportErrors: 
     animationImportWarnings: 
     animationRetargetingWarnings: 
@@ -45,13 +55,13 @@ ModelImporter:
     globalScale: 1
     meshCompression: 0
     addColliders: 0
-    importBlendShapes: 1
+    importBlendShapes: 0
     swapUVChannels: 0
     generateSecondaryUV: 0
     useFileUnits: 1
     optimizeMeshForGPU: 1
     keepQuads: 0
-    weldVertices: 1
+    weldVertices: 0
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
@@ -60,8 +70,8 @@ ModelImporter:
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
-    tangentImportMode: 3
-  importAnimation: 1
+    tangentImportMode: 4
+  importAnimation: 0
   copyAvatar: 0
   humanDescription:
     serializedVersion: 2
@@ -78,7 +88,7 @@ ModelImporter:
     rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
     hasExtraRoot: 0
-    skeletonHasParents: 1
+    skeletonHasParents: 0
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   animationType: 0
   humanoidOversampling: 1
